@@ -27,6 +27,7 @@ def recommend(song):
     distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
     recommended_music_names = []
     recommended_music_posters = []
+    recommended_music_artists = []
     for i in distances[1:6]:
         # fetch the movie poster
         artist = music.iloc[i[0]].artist
@@ -34,8 +35,9 @@ def recommend(song):
         print(music.iloc[i[0]].song)
         recommended_music_posters.append(get_song_album_cover_url(music.iloc[i[0]].song, artist))
         recommended_music_names.append(music.iloc[i[0]].song)
+        recommended_music_artists.append(music.iloc[i[0]].artist)
 
-    return recommended_music_names,recommended_music_posters
+    return recommended_music_names,recommended_music_posters,recommended_music_artists
 
 st.header('Music Recommender System')
 music = pickle.load(open('df.pkl','rb'))
@@ -48,25 +50,27 @@ selected_movie = st.selectbox(
 )
 
 if st.button('Show Recommendation'):
-    recommended_music_names,recommended_music_posters = recommend(selected_movie)
-    col1, col2, col3, col4, col5= st.columns(5)
+    recommended_music_names,recommended_music_posters,recommended_music_artists = recommend(selected_movie)
+
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
+        st.markdown("<strong>Song Name</strong>", unsafe_allow_html=True)
         st.text(recommended_music_names[0])
-        st.image(recommended_music_posters[0])
-    with col2:
         st.text(recommended_music_names[1])
-        st.image(recommended_music_posters[1])
-
-    with col3:
         st.text(recommended_music_names[2])
-        st.image(recommended_music_posters[2])
+    with col2:
+        st.markdown("<strong>Artist(s)</strong>", unsafe_allow_html=True)
+        st.text(recommended_music_artists[0])
+        st.text(recommended_music_artists[1])
+        st.text(recommended_music_artists[2])
+    with col3:
+        st.markdown("<strong>Best Rec.</strong>", unsafe_allow_html=True)
+        song1_best = st.checkbox(label="rec1Best", key="rec1Best", value=False, label_visibility="collapsed")
+        song2_best = st.checkbox(label="rec2Best", key="rec2Best", value=False, label_visibility="collapsed")
+        song3_best = st.checkbox(label="rec3Best", key="rec3Best", value=False, label_visibility="collapsed")
     with col4:
-        st.text(recommended_music_names[3])
-        st.image(recommended_music_posters[3])
-    with col5:
-        st.text(recommended_music_names[4])
-        st.image(recommended_music_posters[4])
-
-    #with open('df.pkl', 'wb') as df_file:
-        #pickle.dump(music, df_file)
+        st.markdown("<strong>Worse Rec.</strong>", unsafe_allow_html=True)
+        song1_worse = st.checkbox(label="rec1Worse", key="rec1Worse", value=False, label_visibility="collapsed")
+        song2_worse = st.checkbox(label="rec2Worse", key="rec2Worse", value=False, label_visibility="collapsed")
+        song3_worse = st.checkbox(label="rec3Worse", key="rec3Worse", value=False, label_visibility="collapsed")
 
