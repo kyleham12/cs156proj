@@ -3,6 +3,7 @@ import streamlit as st
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
+
 CLIENT_ID = "70a9fb89662f4dac8d07321b259eaad7"
 CLIENT_SECRET = "4d6710460d764fbbb8d8753dc094d131"
 
@@ -31,13 +32,14 @@ def recommend(song):
     for i in distances[1:6]:
         # fetch the movie poster
         artist = music.iloc[i[0]].artist
-        print(artist)
-        print(music.iloc[i[0]].song)
-        recommended_music_posters.append(get_song_album_cover_url(music.iloc[i[0]].song, artist))
+        #print(artist)
+        #print(music.iloc[i[0]].song)
+        #recommended_music_posters.append(get_song_album_cover_url(music.iloc[i[0]].song, artist))
         recommended_music_names.append(music.iloc[i[0]].song)
         recommended_music_artists.append(music.iloc[i[0]].artist)
-
     return recommended_music_names,recommended_music_posters,recommended_music_artists
+
+
 
 st.header('Music Recommender System')
 music = pickle.load(open('df.pkl','rb'))
@@ -49,28 +51,27 @@ selected_movie = st.selectbox(
     music_list
 )
 
-if st.button('Show Recommendation'):
-    recommended_music_names,recommended_music_posters,recommended_music_artists = recommend(selected_movie)
 
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.markdown("<strong>Song Name</strong>", unsafe_allow_html=True)
-        st.text(recommended_music_names[0])
-        st.text(recommended_music_names[1])
-        st.text(recommended_music_names[2])
-    with col2:
-        st.markdown("<strong>Artist(s)</strong>", unsafe_allow_html=True)
-        st.text(recommended_music_artists[0])
-        st.text(recommended_music_artists[1])
-        st.text(recommended_music_artists[2])
-    with col3:
-        st.markdown("<strong>Best Rec.</strong>", unsafe_allow_html=True)
-        song1_best = st.checkbox(label="rec1Best", key="rec1Best", value=False, label_visibility="collapsed")
-        song2_best = st.checkbox(label="rec2Best", key="rec2Best", value=False, label_visibility="collapsed")
-        song3_best = st.checkbox(label="rec3Best", key="rec3Best", value=False, label_visibility="collapsed")
-    with col4:
-        st.markdown("<strong>Worse Rec.</strong>", unsafe_allow_html=True)
-        song1_worse = st.checkbox(label="rec1Worse", key="rec1Worse", value=False, label_visibility="collapsed")
-        song2_worse = st.checkbox(label="rec2Worse", key="rec2Worse", value=False, label_visibility="collapsed")
-        song3_worse = st.checkbox(label="rec3Worse", key="rec3Worse", value=False, label_visibility="collapsed")
+recommended_music_names,recommended_music_posters,recommended_music_artists = recommend(selected_movie)
+col1, col2, col3, col4, col5 = st.columns(5)
+with col1:
+    st.markdown("<strong>Song Name</strong>", unsafe_allow_html=True)
+    st.text(recommended_music_names[0])
+    st.text(recommended_music_names[1])
+    st.text(recommended_music_names[2])
+with col2:
+    st.markdown("<strong>Artist(s)</strong>", unsafe_allow_html=True)
+    st.text(recommended_music_artists[0])
+    st.text(recommended_music_artists[1])
+    st.text(recommended_music_artists[2])
+with col4:
+    st.markdown(":+1: (Like)", unsafe_allow_html=True)
+    song1_like = st.checkbox(label="rec1Good", key="rec1Good", value=False, label_visibility="collapsed")
+    song2_like = st.checkbox(label="rec2Good", key="rec2Good", value=False, label_visibility="collapsed")
+    song3_like = st.checkbox(label="rec3Good", key="rec3Good", value=False, label_visibility="collapsed")
+with col5:
+    st.markdown(":-1: (Dislike)", unsafe_allow_html=True)
+    song1_dislike = st.checkbox(label="rec1Dislike", key="rec1Dislike", value=False, label_visibility="collapsed")
+    song2_dislike = st.checkbox(label="rec2Dislike", key="rec2Dislike", value=False, label_visibility="collapsed")
+    song3_dislike = st.checkbox(label="rec3Dislike", key="rec3Dislike", value=False, label_visibility="collapsed")
 
