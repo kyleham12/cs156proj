@@ -8,4 +8,12 @@ Requirements:
 + pip install -U nltk
 + pip install scikit-learn
 
-+ Run python file with (python -m streamlit run app.py)
++ Run python file with (python -m streamlit run app.py) [old]
+
+
+
++ Get latest frontend
+  + cd client
+  + npm run build
+  + cd ..
+  + python app.py
