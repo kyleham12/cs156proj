@@ -15,5 +15,6 @@ Requirements:
 + Get latest frontend
   + cd client
   + npm run build
+  + if you don't have npm then run (npm install)
   + cd ..
   + python app.py
