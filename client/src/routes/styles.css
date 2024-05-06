@@ -1,0 +1,24 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+
+@font-face {
+	font-family: 'Unbutton';
+	src: local('Unbutton'), local('Unbutton'), url('../lib/fonts/unbutton.ttf');
+}
+
+@font-face {
+	font-family: 'Comikan';
+	src: local('Comikan'), local('Comikan'), url('../lib/fonts/COMIKAN.otf');
+}
+
+@font-face {
+	font-family: 'Buba';
+	src: local('Buba'), local('Buba'), url('../lib/fonts/Buba.otf');
+}
+
+@font-face {
+	font-family: 'BadComic';
+	src: local('BadComic'), local('BadComic'), url('../lib/fonts/BadComic.ttf');
+}
