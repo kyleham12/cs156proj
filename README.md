@@ -7,6 +7,7 @@ Requirements:
 + if jupyter not open https://stackoverflow.com/questions/35313876/after-installing-with-pip-jupyter-command-not-found
 + pip install -U nltk
 + pip install scikit-learn
++ pip install -U flask-cors
 
 + Run python file with (python -m streamlit run app.py) [old]
 
