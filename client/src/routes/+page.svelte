@@ -1,7 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	
+	let showRec: boolean = false;
 	let songList: any[] = [];
+	let recList: any[] = [];
+	let selected_song: string = "";
+	let checkboxValues: any[] = [[false, false], [false, false], [false, false], [false, false], [false, false],
+								 [false, false], [false, false], [false, false], [false, false], [false, false]];
+
+
 	async function getSongsList() { 
 		try {
 			const response = await fetch('/getSongsList');
@@ -12,8 +20,6 @@
 		}
 	}
 
-	let recList: any[] = [];
-	let selected_song = "";
 	async function getRecList() {
 		try {
 			const response = await fetch('/getRecList', {
@@ -28,8 +34,10 @@
 		}
 	}
 
-	let checkboxValues: any[] = [[false, false], [false, false], [false, false], [false, false], [false, false],
-								 [false, false], [false, false], [false, false], [false, false], [false, false]];
+	onMount(() => {
+		getSongsList();
+	});
+
 	function toggleCheckbox(rowIndex: number, colIndex: number) {
 		if (colIndex == 0) {
 			if((checkboxValues[rowIndex][colIndex]) && checkboxValues[rowIndex][colIndex + 1]) {
@@ -41,12 +49,6 @@
 			}
 		}
 	}
-	
-	onMount(() => {
-		getSongsList();
-	});
-
-	let showRec = false;
 
 	function showRecButton() {
 		if (selected_song != "") {
@@ -56,12 +58,42 @@
     }
 
 	function submitOpinion() {
-		showRec = false;
-		recList = [];
-		selected_song = ""
-		console.log(checkboxValues);
-		checkboxValues = [[false, false], [false, false], [false, false], [false, false], [false, false],
-						  [false, false], [false, false], [false, false], [false, false], [false, false]];
+		returnOpinion();
+	}
+
+	async function returnOpinion() {
+		let returnInfo: any[] = [];
+		for(let i = 0; i < checkboxValues.length; i++) {
+			if (checkboxValues[i][0] | checkboxValues[i][1]) {
+				let temp: any[] = [recList[i], 0];
+				if (checkboxValues[i][0]) {
+					temp[1] = 1;
+				} else {
+					temp[1] = -1;
+				}
+				returnInfo.push(temp);
+			}
+		}
+		console.log(returnInfo);
+
+		try {
+			const response = await fetch('/getOpinion', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({selected_song: selected_song, returnInfo: returnInfo})
+			});
+			const data = await response.json();
+			console.log(data.msg);
+
+			showRec = false;
+			recList = [];
+			selected_song = ""
+			console.log(checkboxValues);
+			checkboxValues = [[false, false], [false, false], [false, false], [false, false], [false, false],
+							  [false, false], [false, false], [false, false], [false, false], [false, false]];
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
 	}
 </script>
 

@@ -95,6 +95,15 @@ def getRecList():
         #print(recList)
     return jsonify({'recList': recList})
 
+@app.route("/getOpinion", methods=['POST'])
+def getOpinion():
+    data = request.get_json()
+    selected_movie = data.get('selected_song')
+    return_info = data.get('returnInfo')
+    print(selected_movie)
+    print(return_info)
+    return jsonify({'msg': "Opinion saved successfully"})
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
     app.run(debug=True, host='0.0.0.0', port=port)
