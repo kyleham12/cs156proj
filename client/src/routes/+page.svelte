@@ -65,11 +65,11 @@
 		let returnInfo: any[] = [];
 		for(let i = 0; i < checkboxValues.length; i++) {
 			if (checkboxValues[i][0] | checkboxValues[i][1]) {
-				let temp: any[] = [recList[i], 0];
+				let temp: any[] = [recList[i][0],recList[i][1], 0];
 				if (checkboxValues[i][0]) {
-					temp[1] = 1;
+					temp[2] = 1;
 				} else {
-					temp[1] = -1;
+					temp[2] = -1;
 				}
 				returnInfo.push(temp);
 			}
