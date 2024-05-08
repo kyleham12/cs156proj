@@ -59,9 +59,9 @@ def update_feedback(song_name, liked):
 music = pickle.load(open('df.pkl','rb'))
 similarity = pickle.load(open('similarity.pkl','rb'))
 
-music_list = music['song'].values
-
-
+#music_list = music['song'].values
+#artist_list = music['artist'].values
+#print(image_list = music['link'].values.tolist())
 
 @app.route("/")
 def base():
@@ -77,8 +77,18 @@ def assets(path):
     
 @app.route("/getSongsList")
 def getSongsList():
-    song_list = music_list.tolist()
-    return jsonify({'songList': song_list})
+    song_list = music['song'].values.tolist()
+    artist_list = music['artist'].values.tolist()
+    image_list = []
+    """
+        for i in range(len(song_list)):
+        album_cover_url = get_song_album_cover_url(music.song_list[i], artist_list[i])
+        if album_cover_url is None:
+            print(f"No album cover URL found for '{song_list[i]}' by '{artist_list[i]}'")
+        image_list.append(album_cover_url)
+    """
+   
+    return jsonify({'songList': song_list, 'artist_list': artist_list, 'image_list': image_list})
 
 @app.route("/getRecList", methods=['POST'])
 def getRecList():
