@@ -16,4 +16,7 @@
   + cd client
   + npm run build
   + cd ..
-  + python app.py
+  + python app.py 
++ Errors:
+  + If you get ValueError: X has 19298 features, but SVC is expecting #(a number) features as input. then change line 16 to num_of_features = #
+  + If the list of recommended songs is taking more than 2 minutes to load then refresh the page and try again (Usually happened the first time with new pkl files)
