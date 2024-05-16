@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 CORS(app)
 
-num_of_features = 19298
+num_of_features = 19324
 
 CLIENT_ID = "70a9fb89662f4dac8d07321b259eaad7"
 CLIENT_SECRET = "4d6710460d764fbbb8d8753dc094d131"
@@ -69,6 +69,7 @@ def recommend(song, svc):
         recommended_music_posters.append(get_song_album_cover_url(music.iloc[i[0]].song, artist))
         recommended_music_names.append(music.iloc[i[0]].song)
         recommended_music_artists.append(music.iloc[i[0]].artist)
+    print(recommended_music_names)
     name_index_map = {name: index for index, name in enumerate(recs)}
     sorted_recs = sorted(recommended_music_names, key=lambda x: name_index_map.get(x, len(recs)))
     sorted_artists = []
@@ -77,6 +78,8 @@ def recommend(song, svc):
         artist = music.loc[music['song'] == song, 'artist'].iloc[0]
         sorted_artists.append(artist)
         sorted_posters.append(get_song_album_cover_url(song, artist))
+    print(sorted_recs)
+    #return recommended_music_names,recommended_music_posters,recommended_music_artists
     return sorted_recs,sorted_posters,sorted_artists
 
 def update_model(return_info):
