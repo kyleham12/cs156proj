@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 CORS(app)
 
-num_of_features = 19914
+num_of_features = 19298
 
 CLIENT_ID = "70a9fb89662f4dac8d07321b259eaad7"
 CLIENT_SECRET = "4d6710460d764fbbb8d8753dc094d131"
@@ -103,9 +103,6 @@ svc = pickle.load(open('svc.pkl','rb'))
 
 tfidvector = TfidfVectorizer(analyzer='word',stop_words='english')
 
-#music_list = music['song'].values
-#artist_list = music['artist'].values
-#print(image_list = music['link'].values.tolist())
 
 @app.route("/")
 def base():
@@ -124,29 +121,20 @@ def getSongsList():
     song_list = music['song'].values.tolist()
     artist_list = music['artist'].values.tolist()
     image_list = []
-    """
-        for i in range(len(song_list)):
-        album_cover_url = get_song_album_cover_url(music.song_list[i], artist_list[i])
-        if album_cover_url is None:
-            print(f"No album cover URL found for '{song_list[i]}' by '{artist_list[i]}'")
-        image_list.append(album_cover_url)
-    """
-   
     return jsonify({'songList': song_list, 'artist_list': artist_list, 'image_list': image_list})
 
 @app.route("/getRecList", methods=['POST'])
 def getRecList():
     data = request.get_json()
     selected_movie = data.get('selected_song')
-    recommended_music_names,recommended_music_posters,recommended_music_artists = recommend(selected_movie, svc)
-    recList = [];
+    sorted_recs,sorted_posters,sorted_artists  = recommend(selected_movie, svc)
+    recList = []
     for i in range(0,10):
         temp = []
-        temp.append(recommended_music_names[i])
-        temp.append(recommended_music_artists[i])
-        temp.append(recommended_music_posters[i])
+        temp.append(sorted_recs[i])
+        temp.append(sorted_artists[i])
+        temp.append(sorted_posters[i])
         recList.append(temp)
-        #print(recList)
     return jsonify({'recList': recList})
 
 @app.route("/getOpinion", methods=['POST'])

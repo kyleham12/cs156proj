@@ -12,6 +12,7 @@
 	let searchArray: any[] = [];
 	let search = false;
 	let selected_artist = "";
+	let savingOpinion = false;
 
 	async function getSongsList() { 
 		try {
@@ -24,8 +25,6 @@
 			for(let i = 0; i < songList.length; i++) {
 				songSelect.push([songList[i], artist_list[i], image_list[i]]);
 			}
-			//console.log(songSelect);
-			//songSelect = data.songSelect.sort((a: any, b: any) => a[0][0].localeCompare(b[0][0]));
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -68,16 +67,15 @@
 			});
 			const data = await response.json();
 			console.log(data.msg);
-
 			showRec = false;
 			recList = [];
 			selected_song = "";
-			//console.log(checkboxValues);
 			checkboxValues = [[false, false], [false, false], [false, false], [false, false], [false, false],
 							  [false, false], [false, false], [false, false], [false, false], [false, false]];
 			searchString = "";
 			searchArray = [];
 			selected_artist = "";
+			savingOpinion = false;
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -107,6 +105,7 @@
     }
 
 	function submitOpinion() {
+		savingOpinion = true;
 		returnOpinion();
 	}
 
@@ -207,15 +206,24 @@
 										</div>
 									</td>
 									<td></td>
-									<td><input type="checkbox" class="checkbox" bind:checked={checkboxValues[rowIndex][0]} on:change={() => toggleCheckbox(rowIndex, 0)}/></td>
-									<td><input type="checkbox" class="checkbox" bind:checked={checkboxValues[rowIndex][1]} on:change={() => toggleCheckbox(rowIndex, 1)}/></td>
+									{#if savingOpinion}
+										<td><input type="checkbox" class="checkbox" disabled bind:checked={checkboxValues[rowIndex][0]}/></td>
+										<td><input type="checkbox" class="checkbox" disabled bind:checked={checkboxValues[rowIndex][1]}/></td>
+									{:else}
+										<td><input type="checkbox" class="checkbox" bind:checked={checkboxValues[rowIndex][0]} on:change={() => toggleCheckbox(rowIndex, 0)}/></td>
+										<td><input type="checkbox" class="checkbox" bind:checked={checkboxValues[rowIndex][1]} on:change={() => toggleCheckbox(rowIndex, 1)}/></td>
+									{/if}
 								</tr>
 							{/if}
 						{/each}
 						{#if recList.length > 0}
 							<tr>
 								<td colspan="4">
-									<button class="btn btn-outline w-full" on:click={submitOpinion}>Submit Opinion</button>
+									{#if savingOpinion}
+										<button class="btn btn-outline btn-disabled w-full">Processing Opinion, Please Wait</button>
+									{:else}
+										<button class="btn btn-outline w-full" on:click={submitOpinion}>Submit Opinion</button>
+									{/if}
 								</td>
 							</tr>
 						{:else}
